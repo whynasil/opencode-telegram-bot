@@ -8,6 +8,7 @@ export const en = {
   "cmd.description.opencode_start": "Start OpenCode server",
   "cmd.description.opencode_stop": "Stop OpenCode server",
   "cmd.description.help": "Help",
+  "cmd.description.rename": "Rename current session",
 
   "callback.unknown_command": "Unknown command",
   "callback.processing_error": "Processing error",
@@ -350,6 +351,17 @@ export const en = {
     "🎤 Voice recognition is not configured.\n\nSet STT_API_URL and STT_API_KEY in .env to enable it.",
   "stt.error": "🔴 Failed to recognize audio: {error}",
   "stt.empty_result": "🎤 No speech detected in the audio message.",
+
+  "rename.no_active_session":
+    "📋 No active session to rename. Use /sessions to select one or /new to create.",
+  "rename.prompt": "✏️ Send new session name or tap Cancel:",
+  "rename.button.cancel": "❌ Cancel",
+  "rename.cancelled": "❌ Renaming cancelled.",
+  "rename.cancelled_callback": "Cancelled",
+  "rename.empty_title": "⚠️ Session name cannot be empty.",
+  "rename.success": "✅ Session renamed to: {title}",
+  "rename.error": "🔴 Failed to rename session.",
+  "rename.inactive_callback": "Rename is no longer active.",
 } as const;
 
 export type I18nKey = keyof typeof en;

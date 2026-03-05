@@ -10,6 +10,7 @@ export const de: I18nDictionary = {
   "cmd.description.opencode_start": "OpenCode-Server starten",
   "cmd.description.opencode_stop": "OpenCode-Server stoppen",
   "cmd.description.help": "Hilfe",
+  "cmd.description.rename": "Aktuelle Sitzung umbenennen",
 
   "callback.unknown_command": "Unbekannter Befehl",
   "callback.processing_error": "Verarbeitungsfehler",
@@ -365,4 +366,15 @@ export const de: I18nDictionary = {
     "🎤 Spracherkennung ist nicht konfiguriert.\n\nSetze STT_API_URL und STT_API_KEY in .env, um sie zu aktivieren.",
   "stt.error": "🔴 Audio konnte nicht erkannt werden: {error}",
   "stt.empty_result": "🎤 Keine Sprache in der Audionachricht erkannt.",
+
+  "rename.no_active_session":
+    "📋 Keine aktive Sitzung zum Umbenennen. Verwenden Sie /sessions zum Auswählen oder /new zum Erstellen.",
+  "rename.prompt": "✏️ Senden Sie einen neuen Sitzungsnamen oder tippen Sie auf Abbrechen:",
+  "rename.button.cancel": "❌ Abbrechen",
+  "rename.cancelled": "❌ Umbenennen abgebrochen.",
+  "rename.cancelled_callback": "Abgebrochen",
+  "rename.empty_title": "⚠️ Sitzungsname darf nicht leer sein.",
+  "rename.success": "✅ Sitzung umbenannt in: {title}",
+  "rename.error": "🔴 Sitzung konnte nicht umbenannt werden.",
+  "rename.inactive_callback": "Umbenennen ist nicht mehr aktiv.",
 };

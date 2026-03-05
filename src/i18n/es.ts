@@ -10,6 +10,7 @@ export const es: I18nDictionary = {
   "cmd.description.opencode_start": "Iniciar servidor OpenCode",
   "cmd.description.opencode_stop": "Detener servidor OpenCode",
   "cmd.description.help": "Ayuda",
+  "cmd.description.rename": "Renombrar sesión actual",
 
   "callback.unknown_command": "Comando desconocido",
   "callback.processing_error": "Error de procesamiento",
@@ -363,4 +364,15 @@ export const es: I18nDictionary = {
     "🎤 El reconocimiento de voz no está configurado.\n\nConfigura STT_API_URL y STT_API_KEY en .env para habilitarlo.",
   "stt.error": "🔴 No se pudo reconocer el audio: {error}",
   "stt.empty_result": "🎤 No se detectó voz en el mensaje de audio.",
+
+  "rename.no_active_session":
+    "📋 No hay sesión activa para renombrar. Use /sessions para seleccionar o /new para crear.",
+  "rename.prompt": "✏️ Envíe un nuevo nombre de sesión o toque Cancelar:",
+  "rename.button.cancel": "❌ Cancelar",
+  "rename.cancelled": "❌ Renombrado cancelado.",
+  "rename.cancelled_callback": "Cancelado",
+  "rename.empty_title": "⚠️ El nombre de sesión no puede estar vacío.",
+  "rename.success": "✅ Sesión renombrada a: {title}",
+  "rename.error": "🔴 No se pudo renombrar la sesión.",
+  "rename.inactive_callback": "Renombrar ya no está activo.",
 };

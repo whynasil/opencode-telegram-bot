@@ -10,6 +10,7 @@ export const zh: I18nDictionary = {
   "cmd.description.opencode_start": "启动 OpenCode 服务器",
   "cmd.description.opencode_stop": "停止 OpenCode 服务器",
   "cmd.description.help": "帮助",
+  "cmd.description.rename": "重命名当前会话",
 
   "callback.unknown_command": "未知命令",
   "callback.processing_error": "处理错误",
@@ -319,4 +320,14 @@ export const zh: I18nDictionary = {
     "🎤 语音识别尚未配置。\n\n在 .env 中设置 STT_API_URL 和 STT_API_KEY 以启用。",
   "stt.error": "🔴 识别音频失败：{error}",
   "stt.empty_result": "🎤 音频消息中未检测到语音。",
+
+  "rename.no_active_session": "📋 没有活动的会话可以重命名。使用 /sessions 选择或 /new 创建。",
+  "rename.prompt": "✏️ 发送新的会话名称或点击取消：",
+  "rename.button.cancel": "❌ 取消",
+  "rename.cancelled": "❌ 重命名已取消。",
+  "rename.cancelled_callback": "已取消",
+  "rename.empty_title": "⚠️ 会话名称不能为空。",
+  "rename.success": "✅ 会话已重命名为：{title}",
+  "rename.error": "🔴 无法重命名会话。",
+  "rename.inactive_callback": "重命名不再活动。",
 };

@@ -10,6 +10,7 @@ export const ru: I18nDictionary = {
   "cmd.description.opencode_start": "Запустить OpenCode сервер",
   "cmd.description.opencode_stop": "Остановить OpenCode сервер",
   "cmd.description.help": "Справка",
+  "cmd.description.rename": "Переименовать текущую сессию",
 
   "callback.unknown_command": "Неизвестная команда",
   "callback.processing_error": "Ошибка обработки",
@@ -353,4 +354,15 @@ export const ru: I18nDictionary = {
     "🎤 Распознавание голоса не настроено.\n\nУстановите STT_API_URL и STT_API_KEY в .env для включения.",
   "stt.error": "🔴 Не удалось распознать аудио: {error}",
   "stt.empty_result": "🎤 В аудиосообщении не обнаружена речь.",
+
+  "rename.no_active_session":
+    "📋 Нет активной сессии для переименования. Используйте /sessions для выбора или /new для создания.",
+  "rename.prompt": "✏️ Отправьте новое название сессии или нажмите Отмена:",
+  "rename.button.cancel": "❌ Отмена",
+  "rename.cancelled": "❌ Переименование отменено.",
+  "rename.cancelled_callback": "Отменено",
+  "rename.empty_title": "⚠️ Название сессии не может быть пустым.",
+  "rename.success": "✅ Сессия переименована в: {title}",
+  "rename.error": "🔴 Не удалось переименовать сессию.",
+  "rename.inactive_callback": "Переименование больше не активно.",
 };
