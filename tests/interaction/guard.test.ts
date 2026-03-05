@@ -31,11 +31,14 @@ function createContext({
   }
 
   if (photo) {
-    message.photo = [{ file_id: "photo-file-id", file_unique_id: "unique-photo-id", width: 1280, height: 720 }];
+    message.photo = [
+      { file_id: "photo-file-id", file_unique_id: "unique-photo-id", width: 1280, height: 720 },
+    ];
   }
 
   return {
-    message: Object.keys(message).length > 0 ? (message as unknown as Context["message"]) : undefined,
+    message:
+      Object.keys(message).length > 0 ? (message as unknown as Context["message"]) : undefined,
     callbackQuery:
       callbackData !== undefined ? ({ data: callbackData } as Context["callbackQuery"]) : undefined,
   } as Context;
@@ -149,19 +152,6 @@ describe("interaction guard", () => {
     expect(decision.inputType).toBe("other");
   });
 
-  it("blocks voice input when text input is expected", () => {
-    interactionManager.start({
-      kind: "rename",
-      expectedInput: "text",
-    });
-
-    const decision = resolveInteractionGuardDecision(createContext({ voice: true }));
-
-    expect(decision.allow).toBe(false);
-    expect(decision.reason).toBe("expected_text");
-    expect(decision.inputType).toBe("other");
-  });
-
   it("blocks audio input when mixed input is expected", () => {
     interactionManager.start({
       kind: "question",
@@ -213,50 +203,6 @@ describe("interaction guard", () => {
     expect(decision.allow).toBe(false);
     expect(decision.reason).toBe("command_not_allowed");
     expect(decision.state?.kind).toBe("question");
-  });
-
-  it("allows rename cancel callback when rename expects text", () => {
-    interactionManager.start({
-      kind: "rename",
-      expectedInput: "text",
-    });
-
-    const decision = resolveInteractionGuardDecision(
-      createContext({ callbackData: "rename:cancel" }),
-    );
-
-    expect(decision.allow).toBe(true);
-    expect(decision.inputType).toBe("callback");
-    expect(decision.state?.kind).toBe("rename");
-  });
-
-  it("blocks non-rename callback while rename expects text", () => {
-    interactionManager.start({
-      kind: "rename",
-      expectedInput: "text",
-    });
-
-    const decision = resolveInteractionGuardDecision(
-      createContext({ callbackData: "project:abc" }),
-    );
-
-    expect(decision.allow).toBe(false);
-    expect(decision.reason).toBe("expected_text");
-    expect(decision.state?.kind).toBe("rename");
-  });
-
-  it("blocks photo input when text input is expected (rename)", () => {
-    interactionManager.start({
-      kind: "rename",
-      expectedInput: "text",
-    });
-
-    const decision = resolveInteractionGuardDecision(createContext({ photo: true }));
-
-    expect(decision.allow).toBe(false);
-    expect(decision.reason).toBe("expected_text");
-    expect(decision.inputType).toBe("other");
-    expect(decision.state?.kind).toBe("rename");
   });
 
   it("blocks photo input when mixed input is expected (question)", () => {

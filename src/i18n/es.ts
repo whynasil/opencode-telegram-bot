@@ -319,21 +319,6 @@ export const es: I18nDictionary = {
   "runtime.wizard.tty_required":
     "El asistente interactivo requiere un terminal TTY. Ejecuta `opencode-telegram config` en una shell interactiva.",
 
-  "rename.no_session": "⚠️ No hay una sesión activa. Crea o selecciona una sesión primero.",
-  "rename.prompt": "📝 Introduce un nuevo título para la sesión:\n\nActual: {title}",
-  "rename.empty_title": "⚠️ El título no puede estar vacío.",
-  "rename.success": "✅ Sesión renombrada a: {title}",
-  "rename.error": "🔴 No se pudo renombrar la sesión.",
-  "rename.cancelled": "❌ Cambio de nombre cancelado.",
-  "rename.inactive_callback": "La solicitud de cambio de nombre está inactiva",
-  "rename.inactive":
-    "⚠️ La solicitud de cambio de nombre no está activa. Ejecuta /rename otra vez.",
-  "rename.blocked.expected_name":
-    "⚠️ Introduce el nuevo nombre de la sesión como texto o toca Cancelar en el mensaje de cambio de nombre.",
-  "rename.blocked.command_not_allowed":
-    "⚠️ Este comando no está disponible mientras el cambio de nombre espera un nuevo nombre.",
-  "rename.button.cancel": "❌ Cancelar",
-
   "commands.select": "Elige un comando de OpenCode:",
   "commands.empty": "📭 No hay comandos de OpenCode disponibles para este proyecto.",
   "commands.fetch_error": "🔴 No se pudieron cargar los comandos de OpenCode.",
@@ -349,8 +334,6 @@ export const es: I18nDictionary = {
   "commands.arguments_empty":
     "⚠️ Los argumentos no pueden estar vacíos. Envía texto o toca Ejecutar.",
   "commands.execute_error": "🔴 No se pudo ejecutar el comando de OpenCode.",
-
-  "cmd.description.rename": "Renombrar la sesión actual",
 
   "cli.usage":
     "Uso:\n  opencode-telegram [start] [--mode sources|installed]\n  opencode-telegram status\n  opencode-telegram stop\n  opencode-telegram config\n\nNotas:\n  - Sin comando, el valor por defecto es `start`\n  - `--mode` actualmente solo se admite para `start`",

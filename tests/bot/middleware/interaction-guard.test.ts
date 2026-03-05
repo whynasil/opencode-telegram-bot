@@ -62,7 +62,7 @@ describe("interactionGuardMiddleware", () => {
 
   it("blocks callback and answers callback query when text is expected", async () => {
     interactionManager.start({
-      kind: "rename",
+      kind: "permission",
       expectedInput: "text",
     });
 
@@ -73,7 +73,7 @@ describe("interactionGuardMiddleware", () => {
 
     expect(next).not.toHaveBeenCalled();
     expect(ctx.answerCallbackQuery).toHaveBeenCalledWith({
-      text: t("rename.blocked.expected_name"),
+      text: t("permission.blocked.expected_reply"),
     });
     expect(ctx.reply).not.toHaveBeenCalled();
   });
@@ -139,37 +139,6 @@ describe("interactionGuardMiddleware", () => {
 
     expect(next).not.toHaveBeenCalled();
     expect(ctx.reply).toHaveBeenCalledWith(t("permission.blocked.command_not_allowed"));
-  });
-
-  it("shows rename-specific message for disallowed command", async () => {
-    interactionManager.start({
-      kind: "rename",
-      expectedInput: "text",
-      allowedCommands: ["/status"],
-    });
-
-    const ctx = createTextContext("/new");
-    const next: NextFunction = vi.fn().mockResolvedValue(undefined);
-
-    await interactionGuardMiddleware(ctx, next);
-
-    expect(next).not.toHaveBeenCalled();
-    expect(ctx.reply).toHaveBeenCalledWith(t("rename.blocked.command_not_allowed"));
-  });
-
-  it("blocks voice input while rename interaction expects text", async () => {
-    interactionManager.start({
-      kind: "rename",
-      expectedInput: "text",
-    });
-
-    const ctx = createVoiceContext();
-    const next: NextFunction = vi.fn().mockResolvedValue(undefined);
-
-    await interactionGuardMiddleware(ctx, next);
-
-    expect(next).not.toHaveBeenCalled();
-    expect(ctx.reply).toHaveBeenCalledWith(t("rename.blocked.expected_name"));
   });
 
   it("shows question-specific message for blocked text", async () => {

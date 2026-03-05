@@ -97,7 +97,6 @@ Current command set:
 - [x] `/stop` - stop the current task
 - [x] `/sessions` - show and switch recent sessions
 - [x] `/projects` - show and switch projects
-- [x] `/rename` - rename current session
 - [x] `/commands` - browse and run custom commands (plus built-ins like `init` and `review`)
 - [x] `/opencode_start` - start local OpenCode server
 - [x] `/opencode_stop` - stop local OpenCode server
@@ -109,7 +108,7 @@ Text messages (non-commands) are treated as prompts for OpenCode only when no bl
 
 Interaction routing rules:
 
-- Only one interactive flow can be active at a time (inline menu, permission, question, rename, commands)
+- Only one interactive flow can be active at a time (inline menu, permission, question, commands)
 - While an interaction is active, unrelated input is blocked with a contextual hint
 - Allowed utility commands during active interactions: `/help`, `/status`, `/stop`
 - Unknown slash commands return an explicit fallback message

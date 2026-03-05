@@ -35,29 +35,6 @@ describe("interactionManager", () => {
     expect(state.allowedCommands).toEqual(["/help", "/status"]);
   });
 
-  it("transitions active interaction", () => {
-    interactionManager.start({
-      kind: "rename",
-      expectedInput: "text",
-      metadata: { step: 1 },
-    });
-
-    const transitioned = interactionManager.transition({
-      kind: "question",
-      expectedInput: "mixed",
-      allowedCommands: ["/stop"],
-      metadata: { step: 2 },
-      expiresInMs: 5000,
-    });
-
-    expect(transitioned).not.toBeNull();
-    expect(transitioned?.kind).toBe("question");
-    expect(transitioned?.expectedInput).toBe("mixed");
-    expect(transitioned?.allowedCommands).toEqual(["/stop"]);
-    expect(transitioned?.metadata).toEqual({ step: 2 });
-    expect(typeof transitioned?.expiresAt).toBe("number");
-  });
-
   it("tracks expiration by expiresAt", () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-01-01T00:00:00.000Z"));

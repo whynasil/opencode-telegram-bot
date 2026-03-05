@@ -308,20 +308,6 @@ export const en = {
   "runtime.wizard.tty_required":
     "Interactive wizard requires a TTY terminal. Run `opencode-telegram config` in an interactive shell.",
 
-  "rename.no_session": "⚠️ No active session. Create or select a session first.",
-  "rename.prompt": "📝 Enter new title for session:\n\nCurrent: {title}",
-  "rename.empty_title": "⚠️ Title cannot be empty.",
-  "rename.success": "✅ Session renamed to: {title}",
-  "rename.error": "🔴 Failed to rename session.",
-  "rename.cancelled": "❌ Rename cancelled.",
-  "rename.inactive_callback": "Rename request is inactive",
-  "rename.inactive": "⚠️ Rename request is not active. Run /rename again.",
-  "rename.blocked.expected_name":
-    "⚠️ Enter a new session name as text or tap Cancel in rename message.",
-  "rename.blocked.command_not_allowed":
-    "⚠️ This command is not available while rename is waiting for a new name.",
-  "rename.button.cancel": "❌ Cancel",
-
   "commands.select": "Choose an OpenCode command:",
   "commands.empty": "📭 No OpenCode commands are available for this project.",
   "commands.fetch_error": "🔴 Failed to load OpenCode commands.",
@@ -336,8 +322,6 @@ export const en = {
   "commands.executing_prefix": "⚡ Executing command:",
   "commands.arguments_empty": "⚠️ Arguments cannot be empty. Send text or tap Execute.",
   "commands.execute_error": "🔴 Failed to execute OpenCode command.",
-
-  "cmd.description.rename": "Rename current session",
 
   "cli.usage":
     "Usage:\n  opencode-telegram [start] [--mode sources|installed]\n  opencode-telegram status\n  opencode-telegram stop\n  opencode-telegram config\n\nNotes:\n  - No command defaults to `start`\n  - `--mode` is currently supported for `start` only",

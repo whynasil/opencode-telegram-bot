@@ -278,18 +278,6 @@ export const zh: I18nDictionary = {
   "runtime.wizard.tty_required":
     "交互式向导需要 TTY 终端。请在交互式 shell 中运行 `opencode-telegram config`。",
 
-  "rename.no_session": "⚠️ 没有活动会话。请先创建或选择一个会话。",
-  "rename.prompt": "📝 请输入会话的新标题：\n\n当前：{title}",
-  "rename.empty_title": "⚠️ 标题不能为空。",
-  "rename.success": "✅ 会话已重命名为：{title}",
-  "rename.error": "🔴 重命名会话失败。",
-  "rename.cancelled": "❌ 重命名已取消。",
-  "rename.inactive_callback": "重命名请求已失效",
-  "rename.inactive": "⚠️ 重命名请求未激活。请再次运行 /rename。",
-  "rename.blocked.expected_name": "⚠️ 请以文本输入新会话名称，或在重命名消息中点击取消。",
-  "rename.blocked.command_not_allowed": "⚠️ 重命名等待新名称期间不可用此命令。",
-  "rename.button.cancel": "❌ 取消",
-
   "commands.select": "请选择一个 OpenCode 命令：",
   "commands.empty": "📭 当前项目没有可用的 OpenCode 命令。",
   "commands.fetch_error": "🔴 加载 OpenCode 命令失败。",
@@ -303,8 +291,6 @@ export const zh: I18nDictionary = {
   "commands.executing_prefix": "⚡ 执行命令:",
   "commands.arguments_empty": "⚠️ 参数不能为空。请发送文本或点击执行。",
   "commands.execute_error": "🔴 执行 OpenCode 命令失败。",
-
-  "cmd.description.rename": "重命名当前会话",
 
   "cli.usage":
     "用法：\n  opencode-telegram [start] [--mode sources|installed]\n  opencode-telegram status\n  opencode-telegram stop\n  opencode-telegram config\n\n说明：\n  - 不带命令时默认执行 `start`\n  - `--mode` 目前仅支持 `start` 命令",

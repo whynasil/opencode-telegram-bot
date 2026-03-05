@@ -23,7 +23,6 @@ import { projectsCommand, handleProjectSelect } from "./commands/projects.js";
 import { stopCommand } from "./commands/stop.js";
 import { opencodeStartCommand } from "./commands/opencode-start.js";
 import { opencodeStopCommand } from "./commands/opencode-stop.js";
-import { renameCommand, handleRenameCancel, handleRenameTextAnswer } from "./commands/rename.js";
 import {
   commandsCommand,
   handleCommandsCallback,
@@ -563,7 +562,6 @@ export function createBot(): Bot<Context> {
   bot.command("sessions", sessionsCommand);
   bot.command("new", newCommand);
   bot.command("stop", stopCommand);
-  bot.command("rename", renameCommand);
   bot.command("commands", commandsCommand);
 
   bot.on("message:text", unknownCommandMiddleware);
@@ -587,11 +585,10 @@ export function createBot(): Bot<Context> {
       const handledModel = await handleModelSelect(ctx);
       const handledVariant = await handleVariantSelect(ctx);
       const handledCompactConfirm = await handleCompactConfirm(ctx);
-      const handledRenameCancel = await handleRenameCancel(ctx);
       const handledCommands = await handleCommandsCallback(ctx, { bot, ensureEventSubscription });
 
       logger.debug(
-        `[Bot] Callback handled: inlineCancel=${handledInlineCancel}, session=${handledSession}, project=${handledProject}, question=${handledQuestion}, permission=${handledPermission}, agent=${handledAgent}, model=${handledModel}, variant=${handledVariant}, compactConfirm=${handledCompactConfirm}, rename=${handledRenameCancel}, commands=${handledCommands}`,
+        `[Bot] Callback handled: inlineCancel=${handledInlineCancel}, session=${handledSession}, project=${handledProject}, question=${handledQuestion}, permission=${handledPermission}, agent=${handledAgent}, model=${handledModel}, variant=${handledVariant}, compactConfirm=${handledCompactConfirm}, commands=${handledCommands}`,
       );
 
       if (
@@ -604,7 +601,6 @@ export function createBot(): Bot<Context> {
         !handledModel &&
         !handledVariant &&
         !handledCompactConfirm &&
-        !handledRenameCancel &&
         !handledCommands
       ) {
         logger.debug("Unknown callback query:", ctx.callbackQuery?.data);
@@ -823,11 +819,6 @@ export function createBot(): Bot<Context> {
 
     if (questionManager.isActive()) {
       await handleQuestionTextAnswer(ctx);
-      return;
-    }
-
-    const handledRename = await handleRenameTextAnswer(ctx);
-    if (handledRename) {
       return;
     }
 

@@ -309,20 +309,6 @@ export const ru: I18nDictionary = {
   "runtime.wizard.tty_required":
     "Интерактивный wizard требует TTY-терминал. Запустите `opencode-telegram config` в интерактивной оболочке.",
 
-  "rename.no_session": "⚠️ Нет активной сессии. Сначала создайте или выберите сессию.",
-  "rename.prompt": "📝 Введите новое название сессии:\n\nТекущее: {title}",
-  "rename.empty_title": "⚠️ Название не может быть пустым.",
-  "rename.success": "✅ Сессия переименована в: {title}",
-  "rename.error": "🔴 Не удалось переименовать сессию.",
-  "rename.cancelled": "❌ Переименование отменено.",
-  "rename.inactive_callback": "Запрос переименования неактивен",
-  "rename.inactive": "⚠️ Запрос переименования неактивен. Выполните /rename снова.",
-  "rename.blocked.expected_name":
-    "⚠️ Введите новое название текстом или нажмите Отмена в сообщении переименования.",
-  "rename.blocked.command_not_allowed":
-    "⚠️ Эта команда недоступна, пока ожидается новое название сессии.",
-  "rename.button.cancel": "❌ Отмена",
-
   "commands.select": "Выберите команду OpenCode:",
   "commands.empty": "📭 Для этого проекта нет доступных команд OpenCode.",
   "commands.fetch_error": "🔴 Не удалось загрузить список команд OpenCode.",
@@ -338,8 +324,6 @@ export const ru: I18nDictionary = {
   "commands.arguments_empty":
     "⚠️ Аргументы не могут быть пустыми. Отправьте текст или нажмите Выполнить.",
   "commands.execute_error": "🔴 Не удалось выполнить команду OpenCode.",
-
-  "cmd.description.rename": "Переименовать текущую сессию",
 
   "cli.usage":
     "Использование:\n  opencode-telegram [start] [--mode sources|installed]\n  opencode-telegram status\n  opencode-telegram stop\n  opencode-telegram config\n\nЗаметки:\n  - Без команды по умолчанию используется `start`\n  - `--mode` сейчас поддерживается только для `start`",

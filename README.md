@@ -103,7 +103,6 @@ opencode-telegram config
 | `/stop`           | Abort the current task                                  |
 | `/sessions`       | Browse and switch between recent sessions               |
 | `/projects`       | Switch between OpenCode projects                        |
-| `/rename`         | Rename the current session                              |
 | `/commands`       | Browse and run custom commands                          |
 | `/opencode_start` | Start the OpenCode server remotely                      |
 | `/opencode_stop`  | Stop the OpenCode server remotely                       |

@@ -321,20 +321,6 @@ export const de: I18nDictionary = {
   "runtime.wizard.tty_required":
     "Der interaktive Assistent erfordert ein TTY-Terminal. Führe `opencode-telegram config` in einer interaktiven Shell aus.",
 
-  "rename.no_session": "⚠️ Keine aktive Sitzung. Erstelle oder wähle zuerst eine Sitzung.",
-  "rename.prompt": "📝 Neuen Titel für die Sitzung eingeben:\n\nAktuell: {title}",
-  "rename.empty_title": "⚠️ Titel darf nicht leer sein.",
-  "rename.success": "✅ Sitzung umbenannt in: {title}",
-  "rename.error": "🔴 Sitzung konnte nicht umbenannt werden.",
-  "rename.cancelled": "❌ Umbenennen abgebrochen.",
-  "rename.inactive_callback": "Umbenennen-Anfrage ist inaktiv",
-  "rename.inactive": "⚠️ Umbenennen-Anfrage ist nicht aktiv. Starte /rename erneut.",
-  "rename.blocked.expected_name":
-    "⚠️ Sende den neuen Sitzungsnamen als Text oder tippe in der Umbenennen-Nachricht auf Abbrechen.",
-  "rename.blocked.command_not_allowed":
-    "⚠️ Dieser Befehl ist nicht verfügbar, solange beim Umbenennen auf einen neuen Namen gewartet wird.",
-  "rename.button.cancel": "❌ Abbrechen",
-
   "commands.select": "Wähle einen OpenCode-Befehl:",
   "commands.empty": "📭 Für dieses Projekt sind keine OpenCode-Befehle verfügbar.",
   "commands.fetch_error": "🔴 OpenCode-Befehle konnten nicht geladen werden.",
@@ -350,8 +336,6 @@ export const de: I18nDictionary = {
   "commands.arguments_empty":
     "⚠️ Argumente dürfen nicht leer sein. Sende Text oder tippe auf Ausführen.",
   "commands.execute_error": "🔴 OpenCode-Befehl konnte nicht ausgeführt werden.",
-
-  "cmd.description.rename": "Aktuelle Sitzung umbenennen",
 
   "cli.usage":
     "Verwendung:\n  opencode-telegram [start] [--mode sources|installed]\n  opencode-telegram status\n  opencode-telegram stop\n  opencode-telegram config\n\nHinweise:\n  - Ohne Befehl wird standardmäßig `start` verwendet\n  - `--mode` wird derzeit nur für `start` unterstützt",
