@@ -7,6 +7,7 @@ export const es: I18nDictionary = {
   "cmd.description.sessions": "Listar sesiones",
   "cmd.description.projects": "Listar proyectos",
   "cmd.description.commands": "Comandos personalizados",
+  "cmd.description.rename": "Renombrar sesión actual",
   "cmd.description.opencode_start": "Iniciar servidor OpenCode",
   "cmd.description.opencode_stop": "Detener servidor OpenCode",
   "cmd.description.help": "Ayuda",
@@ -143,7 +144,17 @@ export const es: I18nDictionary = {
     "🏗 No hay un proyecto seleccionado.\n\nPrimero selecciona un proyecto con /projects.",
   "new.created": "✅ Sesión nueva creada: {title}",
   "new.create_error":
-    "🔴 OpenCode Server no está disponible u ocurrió un error al crear la sesión.",
+    "🔴 El servidor OpenCode no está disponible o ocurrió un error al crear la sesión.",
+
+  "rename.no_active_session": "⚠️ No hay sesión activa. Crea una sesión con /new",
+  "rename.prompt": "Envía el nuevo nombre para esta sesión como mensaje de texto:",
+  "rename.empty_name":
+    "⚠️ El nombre no puede estar vacío ni contener solo espacios. Envía un nombre válido.",
+  "rename.success": "✅ Sesión renombrada a: {title}",
+  "rename.error": "🔴 Error al renombrar la sesión.",
+  "rename.button.cancel": "❌ Cancelar",
+  "rename.inactive_callback": "La operación de renombrado está inactiva",
+  "rename.cancelled_callback": "Cancelado",
 
   "stop.no_active_session":
     "🛑 El agente no se inició\n\nCrea una sesión con /new o selecciona una con /sessions.",

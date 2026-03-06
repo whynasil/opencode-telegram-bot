@@ -7,6 +7,7 @@ export const zh: I18nDictionary = {
   "cmd.description.sessions": "列出会话",
   "cmd.description.projects": "列出项目",
   "cmd.description.commands": "自定义命令",
+  "cmd.description.rename": "重命名当前会话",
   "cmd.description.opencode_start": "启动 OpenCode 服务器",
   "cmd.description.opencode_stop": "停止 OpenCode 服务器",
   "cmd.description.help": "帮助",
@@ -123,6 +124,15 @@ export const zh: I18nDictionary = {
   "new.project_not_selected": "🏗 未选择项目。\n\n请先使用 /projects 选择一个项目。",
   "new.created": "✅ 新会话已创建：{title}",
   "new.create_error": "🔴 OpenCode 服务器不可用，或创建会话时发生错误。",
+
+  "rename.no_active_session": "⚠️ 没有活动的会话。请使用 /new 创建会话",
+  "rename.prompt": "请发送一条包含会话新名称的文本消息：",
+  "rename.empty_name": "⚠️ 名称不能为空或仅包含空格。请发送有效的名称。",
+  "rename.success": "✅ 会话已重命名为：{title}",
+  "rename.error": "🔴 重命名会话失败。",
+  "rename.button.cancel": "❌ 取消",
+  "rename.inactive_callback": "重命名操作不活动",
+  "rename.cancelled_callback": "已取消",
 
   "stop.no_active_session": "🛑 代理尚未启动\n\n使用 /new 创建会话，或通过 /sessions 选择一个。",
   "stop.in_progress": "🛑 已停止事件流，正在发送中止信号...\n\n等待代理停止。",
