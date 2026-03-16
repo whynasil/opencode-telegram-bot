@@ -25,6 +25,7 @@ import { opencodeStartCommand } from "./commands/opencode-start.js";
 import { opencodeStopCommand } from "./commands/opencode-stop.js";
 import { renameCommand, handleRenameCancel, handleRenameTextAnswer } from "./commands/rename.js";
 import { handleTaskCallback, handleTaskTextInput, taskCommand } from "./commands/task.js";
+import { handleTaskListCallback, taskListCommand } from "./commands/tasklist.js";
 import {
   commandsCommand,
   handleCommandsCallback,
@@ -582,6 +583,7 @@ export function createBot(): Bot<Context> {
   bot.command("new", newCommand);
   bot.command("abort", abortCommand);
   bot.command("task", taskCommand);
+  bot.command("tasklist", taskListCommand);
   bot.command("rename", renameCommand);
   bot.command("commands", commandsCommand);
 
@@ -607,11 +609,12 @@ export function createBot(): Bot<Context> {
       const handledVariant = await handleVariantSelect(ctx);
       const handledCompactConfirm = await handleCompactConfirm(ctx);
       const handledTask = await handleTaskCallback(ctx);
+      const handledTaskList = await handleTaskListCallback(ctx);
       const handledRenameCancel = await handleRenameCancel(ctx);
       const handledCommands = await handleCommandsCallback(ctx, { bot, ensureEventSubscription });
 
       logger.debug(
-        `[Bot] Callback handled: inlineCancel=${handledInlineCancel}, session=${handledSession}, project=${handledProject}, question=${handledQuestion}, permission=${handledPermission}, agent=${handledAgent}, model=${handledModel}, variant=${handledVariant}, compactConfirm=${handledCompactConfirm}, task=${handledTask}, rename=${handledRenameCancel}, commands=${handledCommands}`,
+        `[Bot] Callback handled: inlineCancel=${handledInlineCancel}, session=${handledSession}, project=${handledProject}, question=${handledQuestion}, permission=${handledPermission}, agent=${handledAgent}, model=${handledModel}, variant=${handledVariant}, compactConfirm=${handledCompactConfirm}, task=${handledTask}, taskList=${handledTaskList}, rename=${handledRenameCancel}, commands=${handledCommands}`,
       );
 
       if (
@@ -625,6 +628,7 @@ export function createBot(): Bot<Context> {
         !handledVariant &&
         !handledCompactConfirm &&
         !handledTask &&
+        !handledTaskList &&
         !handledRenameCancel &&
         !handledCommands
       ) {

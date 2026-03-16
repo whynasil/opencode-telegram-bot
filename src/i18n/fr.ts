@@ -7,6 +7,7 @@ export const fr: I18nDictionary = {
   "cmd.description.sessions": "Lister les sessions",
   "cmd.description.projects": "Lister les projets",
   "cmd.description.task": "Créer une tâche planifiée",
+  "cmd.description.tasklist": "Afficher les tâches planifiées",
   "cmd.description.commands": "Commandes personnalisées",
   "cmd.description.opencode_start": "Démarrer le serveur OpenCode",
   "cmd.description.opencode_stop": "Arrêter le serveur OpenCode",
@@ -49,7 +50,7 @@ export const fr: I18nDictionary = {
   "common.unknown_error": "erreur inconnue",
 
   "start.welcome":
-    "👋 Bienvenue dans OpenCode Telegram Bot !\n\nUtilisez les commandes :\n/projects — sélectionner un projet\n/sessions — liste des sessions\n/new — nouvelle session\n/task — tâche planifiée\n/status — statut\n/help — aide\n\nUtilisez les boutons du bas pour choisir le mode d'agent, le modèle et la variante.",
+    "👋 Bienvenue dans OpenCode Telegram Bot !\n\nUtilisez les commandes :\n/projects — sélectionner un projet\n/sessions — liste des sessions\n/new — nouvelle session\n/task — tâche planifiée\n/tasklist — tâches planifiées\n/status — statut\n/help — aide\n\nUtilisez les boutons du bas pour choisir le mode d'agent, le modèle et la variante.",
   "help.keyboard_hint":
     "💡 Utilisez les boutons du bas pour le mode d'agent, le modèle, la variante et les actions de contexte.",
   "help.text":
@@ -365,12 +366,25 @@ export const fr: I18nDictionary = {
     "⚠️ Terminez d'abord la configuration de la tâche planifiée : envoyez du texte ou utilisez le bouton dans le message du planning.",
   "task.blocked.command_not_allowed":
     "⚠️ Cette commande n'est pas disponible pendant la création d'une tâche planifiée.",
+  "task.limit_reached":
+    "⚠️ Limite de tâches atteinte ({limit}). Supprimez d'abord une tâche planifiée existante.",
   "task.schedule_too_frequent":
     "Le planning récurrent est trop fréquent. L'intervalle minimum autorisé est d'une fois toutes les 5 minutes.",
   "task.kind.cron": "récurrente",
   "task.kind.once": "ponctuelle",
   "task.run.success": "⏰ Tâche planifiée terminée : {description}\n\n{result}",
   "task.run.error": "🔴 Échec de la tâche planifiée : {description}\n\nErreur : {error}",
+
+  "tasklist.empty": "📭 Aucune tâche planifiée pour le moment.",
+  "tasklist.select": "Sélectionnez une tâche planifiée :",
+  "tasklist.details":
+    "⏰ Tâche planifiée\n\nTâche : {prompt}\nProjet : {project}\nPlanning : {schedule}\nFuseau horaire : {timezone}\nProchaine exécution : {nextRunAt}\nDernière exécution : {lastRunAt}\nNombre d'exécutions : {runCount}",
+  "tasklist.button.delete": "🗑 Supprimer",
+  "tasklist.button.cancel": "❌ Annuler",
+  "tasklist.deleted_callback": "Supprimée",
+  "tasklist.cancelled_callback": "Annulé",
+  "tasklist.inactive_callback": "Ce menu des tâches planifiées est inactif",
+  "tasklist.load_error": "🔴 Impossible de charger les tâches planifiées.",
 
   "commands.select": "Choisissez une commande OpenCode :",
   "commands.empty": "📭 Aucune commande OpenCode n'est disponible pour ce projet.",

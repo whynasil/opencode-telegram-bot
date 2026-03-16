@@ -7,6 +7,7 @@ export const ru: I18nDictionary = {
   "cmd.description.sessions": "Список сессий",
   "cmd.description.projects": "Список проектов",
   "cmd.description.task": "Создать задачу по расписанию",
+  "cmd.description.tasklist": "Список задач по расписанию",
   "cmd.description.commands": "Пользовательские команды",
   "cmd.description.opencode_start": "Запустить OpenCode сервер",
   "cmd.description.opencode_stop": "Остановить OpenCode сервер",
@@ -46,7 +47,7 @@ export const ru: I18nDictionary = {
   "common.unknown_error": "неизвестная ошибка",
 
   "start.welcome":
-    "👋 Добро пожаловать в OpenCode Telegram Bot!\n\nИспользуйте команды:\n/projects — выбрать проект\n/sessions — список сессий\n/new — новая сессия\n/task — задача по расписанию\n/status — статус\n/help — справка\n\nРежим, модель и вариант выбираются кнопками внизу.",
+    "👋 Добро пожаловать в OpenCode Telegram Bot!\n\nИспользуйте команды:\n/projects — выбрать проект\n/sessions — список сессий\n/new — новая сессия\n/task — задача по расписанию\n/tasklist — список задач по расписанию\n/status — статус\n/help — справка\n\nРежим, модель и вариант выбираются кнопками внизу.",
   "help.keyboard_hint":
     "💡 Режим, модель, вариант и действия с контекстом доступны через нижние кнопки клавиатуры.",
   "help.text":
@@ -352,12 +353,25 @@ export const ru: I18nDictionary = {
     "⚠️ Сначала завершите создание задачи по расписанию: отправьте текст или используйте кнопку в сообщении с расписанием.",
   "task.blocked.command_not_allowed":
     "⚠️ Эта команда недоступна, пока идет создание задачи по расписанию.",
+  "task.limit_reached":
+    "⚠️ Достигнут лимит задач ({limit}). Сначала удалите одну из существующих задач по расписанию.",
   "task.schedule_too_frequent":
     "Повторяющееся расписание слишком частое. Минимально допустимый интервал - один запуск в 5 минут.",
   "task.kind.cron": "повторяющаяся",
   "task.kind.once": "однократная",
   "task.run.success": "⏰ Задача по расписанию выполнена: {description}\n\n{result}",
   "task.run.error": "🔴 Ошибка выполнения задачи по расписанию: {description}\n\nОшибка: {error}",
+
+  "tasklist.empty": "📭 Задач по расписанию пока нет.",
+  "tasklist.select": "Выберите задачу по расписанию:",
+  "tasklist.details":
+    "⏰ Задача по расписанию\n\nЗадача: {prompt}\nПроект: {project}\nРасписание: {schedule}\nЧасовой пояс: {timezone}\nСледующий запуск: {nextRunAt}\nПоследний запуск: {lastRunAt}\nКоличество запусков: {runCount}",
+  "tasklist.button.delete": "🗑 Удалить",
+  "tasklist.button.cancel": "❌ Отмена",
+  "tasklist.deleted_callback": "Удалено",
+  "tasklist.cancelled_callback": "Отменено",
+  "tasklist.inactive_callback": "Это меню задач по расписанию уже неактивно",
+  "tasklist.load_error": "🔴 Не удалось загрузить задачи по расписанию.",
 
   "commands.select": "Выберите команду OpenCode:",
   "commands.empty": "📭 Для этого проекта нет доступных команд OpenCode.",

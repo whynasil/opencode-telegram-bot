@@ -7,6 +7,7 @@ export const de: I18nDictionary = {
   "cmd.description.sessions": "Sitzungen auflisten",
   "cmd.description.projects": "Projekte auflisten",
   "cmd.description.task": "Geplante Aufgabe erstellen",
+  "cmd.description.tasklist": "Geplante Aufgaben anzeigen",
   "cmd.description.commands": "Benutzerdefinierte Befehle",
   "cmd.description.opencode_start": "OpenCode-Server starten",
   "cmd.description.opencode_stop": "OpenCode-Server stoppen",
@@ -49,7 +50,7 @@ export const de: I18nDictionary = {
   "common.unknown_error": "unbekannter Fehler",
 
   "start.welcome":
-    "👋 Willkommen beim OpenCode Telegram Bot!\n\nNutze Befehle:\n/projects — Projekt auswählen\n/sessions — Sitzungsliste\n/new — neue Sitzung\n/task — geplante Aufgabe\n/status — Status\n/help — Hilfe\n\nNutze die unteren Buttons, um Modus, Modell und Variante zu wählen.",
+    "👋 Willkommen beim OpenCode Telegram Bot!\n\nNutze Befehle:\n/projects — Projekt auswählen\n/sessions — Sitzungsliste\n/new — neue Sitzung\n/task — geplante Aufgabe\n/tasklist — geplante Aufgaben\n/status — Status\n/help — Hilfe\n\nNutze die unteren Buttons, um Modus, Modell und Variante zu wählen.",
   "help.keyboard_hint":
     "💡 Nutze die unteren Buttons für Modus, Modell, Variante und Kontextaktionen.",
   "help.text":
@@ -364,12 +365,25 @@ export const de: I18nDictionary = {
     "⚠️ Schließe zuerst die aktuelle geplante Aufgabe ab: Sende Text oder nutze die Schaltfläche in der Zeitplan-Nachricht.",
   "task.blocked.command_not_allowed":
     "⚠️ Dieser Befehl ist nicht verfügbar, solange die Erstellung einer geplanten Aufgabe aktiv ist.",
+  "task.limit_reached":
+    "⚠️ Aufgabenlimit erreicht ({limit}). Lösche zuerst eine bestehende geplante Aufgabe.",
   "task.schedule_too_frequent":
     "Der wiederkehrende Zeitplan ist zu häufig. Das minimale erlaubte Intervall ist einmal alle 5 Minuten.",
   "task.kind.cron": "wiederkehrend",
   "task.kind.once": "einmalig",
   "task.run.success": "⏰ Geplante Aufgabe abgeschlossen: {description}\n\n{result}",
   "task.run.error": "🔴 Geplante Aufgabe fehlgeschlagen: {description}\n\nFehler: {error}",
+
+  "tasklist.empty": "📭 Noch keine geplanten Aufgaben.",
+  "tasklist.select": "Wähle eine geplante Aufgabe:",
+  "tasklist.details":
+    "⏰ Geplante Aufgabe\n\nAufgabe: {prompt}\nProjekt: {project}\nZeitplan: {schedule}\nZeitzone: {timezone}\nNächster Lauf: {nextRunAt}\nLetzter Lauf: {lastRunAt}\nAnzahl Läufe: {runCount}",
+  "tasklist.button.delete": "🗑 Löschen",
+  "tasklist.button.cancel": "❌ Abbrechen",
+  "tasklist.deleted_callback": "Gelöscht",
+  "tasklist.cancelled_callback": "Abgebrochen",
+  "tasklist.inactive_callback": "Dieses Menü für geplante Aufgaben ist inaktiv",
+  "tasklist.load_error": "🔴 Geplante Aufgaben konnten nicht geladen werden.",
 
   "commands.select": "Wähle einen OpenCode-Befehl:",
   "commands.empty": "📭 Für dieses Projekt sind keine OpenCode-Befehle verfügbar.",

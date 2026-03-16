@@ -7,6 +7,7 @@ export const zh: I18nDictionary = {
   "cmd.description.sessions": "列出会话",
   "cmd.description.projects": "列出项目",
   "cmd.description.task": "创建定时任务",
+  "cmd.description.tasklist": "查看定时任务",
   "cmd.description.commands": "自定义命令",
   "cmd.description.opencode_start": "启动 OpenCode 服务器",
   "cmd.description.opencode_stop": "停止 OpenCode 服务器",
@@ -42,7 +43,7 @@ export const zh: I18nDictionary = {
   "common.unknown_error": "未知错误",
 
   "start.welcome":
-    "👋 欢迎使用 OpenCode Telegram Bot！\n\n可用命令：\n/projects — 选择项目\n/sessions — 会话列表\n/new — 新建会话\n/task — 定时任务\n/status — 状态\n/help — 帮助\n\n请使用底部按钮选择模式、模型和变体。",
+    "👋 欢迎使用 OpenCode Telegram Bot！\n\n可用命令：\n/projects — 选择项目\n/sessions — 会话列表\n/new — 新建会话\n/task — 定时任务\n/tasklist — 定时任务列表\n/status — 状态\n/help — 帮助\n\n请使用底部按钮选择模式、模型和变体。",
   "help.keyboard_hint": "💡 代理模式、模型、变体和上下文操作请使用底部键盘按钮。",
   "help.text":
     "📖 **帮助**\n\n/status - 查看服务器状态\n/sessions - 会话列表\n/new - 创建新会话\n/help - 帮助",
@@ -317,11 +318,23 @@ export const zh: I18nDictionary = {
   "task.blocked.expected_input":
     "⚠️ 请先完成当前定时任务设置：发送文本，或使用时间安排消息中的按钮。",
   "task.blocked.command_not_allowed": "⚠️ 定时任务创建进行中时，此命令不可用。",
+  "task.limit_reached": "⚠️ 已达到任务数量上限（{limit}）。请先删除一个现有定时任务。",
   "task.schedule_too_frequent": "重复任务过于频繁。最小允许间隔为每 5 分钟一次。",
   "task.kind.cron": "重复",
   "task.kind.once": "一次性",
   "task.run.success": "⏰ 定时任务已完成: {description}\n\n{result}",
   "task.run.error": "🔴 定时任务执行失败: {description}\n\n错误: {error}",
+
+  "tasklist.empty": "📭 还没有定时任务。",
+  "tasklist.select": "请选择一个定时任务：",
+  "tasklist.details":
+    "⏰ 定时任务\n\n任务：{prompt}\n项目：{project}\n计划：{schedule}\n时区：{timezone}\n下次运行：{nextRunAt}\n上次运行：{lastRunAt}\n运行次数：{runCount}",
+  "tasklist.button.delete": "🗑 删除",
+  "tasklist.button.cancel": "❌ 取消",
+  "tasklist.deleted_callback": "已删除",
+  "tasklist.cancelled_callback": "已取消",
+  "tasklist.inactive_callback": "此定时任务菜单已失效",
+  "tasklist.load_error": "🔴 无法加载定时任务。",
 
   "commands.select": "请选择一个 OpenCode 命令：",
   "commands.empty": "📭 当前项目没有可用的 OpenCode 命令。",

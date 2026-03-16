@@ -19,9 +19,54 @@ const mocked = vi.hoisted(() => ({
     modelID: "gpt-5",
     variant: "default",
   },
+  taskLimit: 10,
   parseTaskScheduleMock: vi.fn(),
   addScheduledTaskMock: vi.fn(),
+  listScheduledTasksMock: vi.fn(),
   registerTaskMock: vi.fn(),
+}));
+
+vi.mock("../../../src/config.js", () => ({
+  config: {
+    telegram: {
+      token: "test-token",
+      allowedUserId: 777,
+      proxyUrl: "",
+    },
+    opencode: {
+      apiUrl: "http://localhost:4096",
+      username: "opencode",
+      password: "",
+      model: {
+        provider: "openai",
+        modelId: "gpt-5",
+      },
+    },
+    server: {
+      logLevel: "info",
+    },
+    bot: {
+      get taskLimit() {
+        return mocked.taskLimit;
+      },
+      locale: "en",
+      sessionsListLimit: 10,
+      projectsListLimit: 10,
+      serviceMessagesIntervalSec: 5,
+      hideThinkingMessages: false,
+      hideToolCallMessages: false,
+      messageFormatMode: "markdown",
+    },
+    files: {
+      maxFileSizeKb: 100,
+    },
+    stt: {
+      apiUrl: "",
+      apiKey: "",
+      model: "whisper-large-v3-turbo",
+      language: "",
+    },
+  },
 }));
 
 vi.mock("../../../src/settings/manager.js", () => ({
@@ -38,6 +83,7 @@ vi.mock("../../../src/scheduled-task/schedule-parser.js", () => ({
 
 vi.mock("../../../src/scheduled-task/store.js", () => ({
   addScheduledTask: mocked.addScheduledTaskMock,
+  listScheduledTasks: mocked.listScheduledTasksMock,
 }));
 
 vi.mock("../../../src/scheduled-task/runtime.js", () => ({
@@ -101,8 +147,11 @@ describe("bot/commands/task", () => {
     };
     mocked.parseTaskScheduleMock.mockReset();
     mocked.addScheduledTaskMock.mockReset();
+    mocked.listScheduledTasksMock.mockReset();
     mocked.registerTaskMock.mockReset();
+    mocked.taskLimit = 10;
     mocked.addScheduledTaskMock.mockResolvedValue(undefined);
+    mocked.listScheduledTasksMock.mockReturnValue([]);
     mocked.parseTaskScheduleMock.mockResolvedValue({
       kind: "cron",
       cron: "0 17 * * *",
@@ -131,6 +180,19 @@ describe("bot/commands/task", () => {
         projectWorktree: "D:\\Projects\\Repo",
       },
     });
+  });
+
+  it("does not start flow when task limit is reached", async () => {
+    mocked.taskLimit = 1;
+    mocked.listScheduledTasksMock.mockReturnValue([{ id: "task-1" }]);
+
+    const ctx = createCommandContext();
+
+    await taskCommand(ctx as never);
+
+    expect(ctx.reply).toHaveBeenCalledWith(t("task.limit_reached", { limit: "1" }));
+    expect(taskCreationManager.isActive()).toBe(false);
+    expect(interactionManager.getSnapshot()).toBeNull();
   });
 
   it("parses schedule and switches flow to prompt input", async () => {
@@ -201,6 +263,24 @@ describe("bot/commands/task", () => {
     expect(successCall[0]).toContain("D:\\Projects\\Repo");
     expect(successCall[0]).toContain("openai/gpt-5 (default)");
     expect(successCall[0]).toContain("Every day at 17:00");
+    expect(taskCreationManager.isActive()).toBe(false);
+    expect(interactionManager.getSnapshot()).toBeNull();
+  });
+
+  it("stops task save when limit is reached before final step", async () => {
+    await taskCommand(createCommandContext() as never);
+    await handleTaskTextInput(createTextContext("every day at 17:00", [201, 202]));
+
+    mocked.taskLimit = 1;
+    mocked.listScheduledTasksMock.mockReturnValue([{ id: "task-1" }]);
+
+    const ctx = createTextContext("Send me a daily summary", [301]);
+    const handled = await handleTaskTextInput(ctx);
+
+    expect(handled).toBe(true);
+    expect(mocked.addScheduledTaskMock).not.toHaveBeenCalled();
+    expect(mocked.registerTaskMock).not.toHaveBeenCalled();
+    expect(ctx.reply).toHaveBeenCalledWith(t("task.limit_reached", { limit: "1" }));
     expect(taskCreationManager.isActive()).toBe(false);
     expect(interactionManager.getSnapshot()).toBeNull();
   });

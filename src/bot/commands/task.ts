@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { CommandContext, Context, InlineKeyboard } from "grammy";
+import { config } from "../../config.js";
 import { getDateLocale, t } from "../../i18n/index.js";
 import { interactionManager } from "../../interaction/manager.js";
 import type { InteractionState } from "../../interaction/types.js";
@@ -7,7 +8,7 @@ import { getStoredModel } from "../../model/manager.js";
 import { getCurrentProject } from "../../settings/manager.js";
 import { taskCreationManager } from "../../scheduled-task/creation-manager.js";
 import { parseTaskSchedule } from "../../scheduled-task/schedule-parser.js";
-import { addScheduledTask } from "../../scheduled-task/store.js";
+import { addScheduledTask, listScheduledTasks } from "../../scheduled-task/store.js";
 import { scheduledTaskRuntime } from "../../scheduled-task/runtime.js";
 import {
   createScheduledTaskModel,
@@ -59,6 +60,10 @@ function clearTaskInteraction(reason: string): void {
 function clearTaskFlow(reason: string): void {
   taskCreationManager.clear();
   clearTaskInteraction(reason);
+}
+
+function isTaskLimitReached(): boolean {
+  return listScheduledTasks().length >= config.bot.taskLimit;
 }
 
 function truncateTaskPrompt(prompt: string): string {
@@ -293,6 +298,11 @@ export async function taskCommand(ctx: CommandContext<Context>): Promise<void> {
     return;
   }
 
+  if (isTaskLimitReached()) {
+    await ctx.reply(t("task.limit_reached", { limit: String(config.bot.taskLimit) }));
+    return;
+  }
+
   const currentModel = createScheduledTaskModel(getStoredModel());
 
   taskCreationManager.start(currentProject.id, currentProject.worktree, currentModel);
@@ -492,6 +502,14 @@ export async function handleTaskTextInput(ctx: Context): Promise<boolean> {
   }
 
   try {
+    if (isTaskLimitReached()) {
+      await deleteMessageIfPresent(ctx, flowState.previewMessageId);
+      await deleteMessageIfPresent(ctx, flowState.promptRequestMessageId);
+      clearTaskFlow("task_limit_reached_before_save");
+      await ctx.reply(t("task.limit_reached", { limit: String(config.bot.taskLimit) }));
+      return true;
+    }
+
     const task = buildScheduledTask(
       flowState.projectId,
       flowState.projectWorktree,
