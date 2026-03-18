@@ -241,6 +241,28 @@ describe("summary/tool-message-batcher", () => {
     expect(sendText.mock.calls[1]).toEqual(["s1", "after"]);
   });
 
+  it("drops queued thinking message without removing other entries", async () => {
+    vi.useFakeTimers();
+
+    const sendText = vi.fn().mockResolvedValue(undefined);
+    const sendFile = vi.fn().mockResolvedValue(undefined);
+    const batcher = new ToolMessageBatcher({
+      intervalSeconds: 5,
+      sendText,
+      sendFile,
+    });
+
+    batcher.enqueue("s1", "💭 Thinking...");
+    batcher.enqueue("s1", "Tool call completed");
+    batcher.dropQueuedText("s1", "💭 Thinking...", "stream_started");
+
+    await vi.advanceTimersByTimeAsync(5000);
+
+    expect(sendText).toHaveBeenCalledTimes(1);
+    expect(sendText).toHaveBeenCalledWith("s1", "Tool call completed");
+    expect(sendFile).not.toHaveBeenCalled();
+  });
+
   it("preserves order for immediate mixed sends", async () => {
     const sendOrder: string[] = [];
     const sendText = vi.fn(async (_sessionId: string, text: string) => {

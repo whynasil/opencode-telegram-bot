@@ -48,7 +48,12 @@ import { clearAllInteractionState } from "../interaction/cleanup.js";
 import { keyboardManager } from "../keyboard/manager.js";
 import { subscribeToEvents } from "../opencode/events.js";
 import { summaryAggregator } from "../summary/aggregator.js";
-import { formatSummary, formatToolInfo, getAssistantParseMode } from "../summary/formatter.js";
+import {
+  formatSummary,
+  formatSummaryWithMode,
+  formatToolInfo,
+  getAssistantParseMode,
+} from "../summary/formatter.js";
 import { ToolMessageBatcher } from "../summary/tool-message-batcher.js";
 import { getCurrentSession } from "../session/manager.js";
 import { ingestSessionInfoForCache } from "../session/cache-manager.js";
@@ -66,12 +71,16 @@ import { getStoredModel } from "../model/manager.js";
 import type { FilePartInput } from "@opencode-ai/sdk/v2";
 import { foregroundSessionState } from "../scheduled-task/foreground-state.js";
 import { scheduledTaskRuntime } from "../scheduled-task/runtime.js";
+import { ResponseStreamer } from "./streaming/response-streamer.js";
+import { isTelegramMarkdownParseError } from "./utils/send-with-markdown-fallback.js";
 
 let botInstance: Bot<Context> | null = null;
 let chatIdInstance: number | null = null;
 let commandsInitialized = false;
 
 const TELEGRAM_DOCUMENT_CAPTION_MAX_LENGTH = 1024;
+const TELEGRAM_TEXT_LIMIT = 4096;
+const RESPONSE_STREAM_THROTTLE_MS = 500;
 const SESSION_RETRY_PREFIX = "🔁";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -96,6 +105,37 @@ function prepareDocumentCaption(caption: string): string {
   }
 
   return `${normalizedCaption.slice(0, TELEGRAM_DOCUMENT_CAPTION_MAX_LENGTH - 3)}...`;
+}
+
+function trimToTelegramTextLimit(text: string): string {
+  if (text.length <= TELEGRAM_TEXT_LIMIT) {
+    return text;
+  }
+
+  return `...${text.slice(text.length - (TELEGRAM_TEXT_LIMIT - 3))}`;
+}
+
+function prepareResponseDraftText(messageText: string): {
+  text: string;
+  format: "raw" | "markdown_v2";
+} | null {
+  const parts = formatSummaryWithMode(messageText, config.bot.messageFormatMode);
+  if (parts.length === 0) {
+    return null;
+  }
+
+  const latestPart = parts[parts.length - 1];
+  const withPrefix = parts.length > 1 ? `...\n${latestPart}` : latestPart;
+  const trimmed = trimToTelegramTextLimit(withPrefix.trim());
+
+  if (!trimmed) {
+    return null;
+  }
+
+  return {
+    text: trimmed,
+    format: config.bot.messageFormatMode === "markdown" ? "markdown_v2" : "raw",
+  };
 }
 
 const toolMessageBatcher = new ToolMessageBatcher({
@@ -150,6 +190,54 @@ const toolMessageBatcher = new ToolMessageBatcher({
   },
 });
 
+const streamMessageIdsByDraftId = new Map<number, number>();
+
+const responseStreamer = new ResponseStreamer({
+  throttleMs: RESPONSE_STREAM_THROTTLE_MS,
+  sendDraft: async (draftId, text, options) => {
+    if (!botInstance || !chatIdInstance || chatIdInstance <= 0) {
+      return;
+    }
+
+    const parseMode = options?.parse_mode;
+    const existingMessageId = streamMessageIdsByDraftId.get(draftId);
+
+    if (!existingMessageId) {
+      try {
+        const sentMessage = await botInstance.api.sendMessage(chatIdInstance, text, options);
+        streamMessageIdsByDraftId.set(draftId, sentMessage.message_id);
+      } catch (error) {
+        if (parseMode && isTelegramMarkdownParseError(error)) {
+          const sentMessage = await botInstance.api.sendMessage(chatIdInstance, text);
+          streamMessageIdsByDraftId.set(draftId, sentMessage.message_id);
+          return;
+        }
+
+        throw error;
+      }
+
+      return;
+    }
+
+    try {
+      await botInstance.api.editMessageText(chatIdInstance, existingMessageId, text, options);
+    } catch (error) {
+      if (parseMode && isTelegramMarkdownParseError(error)) {
+        await botInstance.api.editMessageText(chatIdInstance, existingMessageId, text);
+        return;
+      }
+
+      const errorMessage =
+        error instanceof Error ? error.message.toLowerCase() : String(error).toLowerCase();
+      if (errorMessage.includes("message is not modified")) {
+        return;
+      }
+
+      throw error;
+    }
+  },
+});
+
 async function ensureCommandsInitialized(ctx: Context, next: NextFunction): Promise<void> {
   if (commandsInitialized || !ctx.from || ctx.from.id !== config.telegram.allowedUserId) {
     await next();
@@ -186,25 +274,75 @@ async function ensureEventSubscription(directory: string): Promise<void> {
   }
 
   toolMessageBatcher.setIntervalSeconds(config.bot.serviceMessagesIntervalSec);
+  summaryAggregator.setTypingIndicatorEnabled(true);
   summaryAggregator.setOnCleared(() => {
     toolMessageBatcher.clearAll("summary_aggregator_clear");
+    responseStreamer.clearAll("summary_aggregator_clear");
+    streamMessageIdsByDraftId.clear();
   });
 
-  summaryAggregator.setOnComplete(async (sessionId, messageText) => {
+  summaryAggregator.setOnPartial((sessionId, messageId, messageText) => {
+    if (!config.bot.responseStreaming) {
+      return;
+    }
+
+    if (!botInstance || !chatIdInstance) {
+      return;
+    }
+
+    const currentSession = getCurrentSession();
+    if (!currentSession || currentSession.id !== sessionId) {
+      return;
+    }
+
+    if (!config.bot.hideThinkingMessages) {
+      toolMessageBatcher.dropQueuedText(sessionId, t("bot.thinking"), "response_stream_started");
+    }
+
+    const preparedDraft = prepareResponseDraftText(messageText);
+    if (!preparedDraft) {
+      return;
+    }
+
+    responseStreamer.enqueue(sessionId, messageId, preparedDraft);
+  });
+
+  summaryAggregator.setOnComplete(async (sessionId, messageId, messageText) => {
     if (!botInstance || !chatIdInstance) {
       logger.error("Bot or chat ID not available for sending message");
+      responseStreamer.clearMessage(sessionId, messageId, "bot_context_missing");
       foregroundSessionState.markIdle(sessionId);
       return;
     }
 
     const currentSession = getCurrentSession();
     if (currentSession?.id !== sessionId) {
+      responseStreamer.clearMessage(sessionId, messageId, "session_mismatch");
       foregroundSessionState.markIdle(sessionId);
       await scheduledTaskRuntime.flushDeferredDeliveries();
       return;
     }
 
+    let streamedViaDraft = false;
+    if (config.bot.responseStreaming) {
+      const preparedDraft = prepareResponseDraftText(messageText);
+      streamedViaDraft = await responseStreamer.complete(
+        sessionId,
+        messageId,
+        preparedDraft ?? undefined,
+      );
+    }
+
     await toolMessageBatcher.flushSession(sessionId, "assistant_message_completed");
+
+    if (streamedViaDraft) {
+      logger.debug(
+        `[Bot] Final assistant message already streamed (session=${sessionId}, message=${messageId})`,
+      );
+      foregroundSessionState.markIdle(sessionId);
+      await scheduledTaskRuntime.flushDeferredDeliveries();
+      return;
+    }
 
     try {
       const parts = formatSummary(messageText);
@@ -423,11 +561,13 @@ async function ensureEventSubscription(directory: string): Promise<void> {
 
     const currentSession = getCurrentSession();
     if (!currentSession || currentSession.id !== sessionId) {
+      responseStreamer.clearSession(sessionId, "session_error_not_current");
       foregroundSessionState.markIdle(sessionId);
       await scheduledTaskRuntime.flushDeferredDeliveries();
       return;
     }
 
+    responseStreamer.clearSession(sessionId, "session_error");
     await toolMessageBatcher.flushSession(sessionId, "session_error");
 
     const normalizedMessage = message.trim() || t("common.unknown_error");
