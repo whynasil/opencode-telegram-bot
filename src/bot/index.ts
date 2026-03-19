@@ -80,7 +80,7 @@ let commandsInitialized = false;
 
 const TELEGRAM_DOCUMENT_CAPTION_MAX_LENGTH = 1024;
 const TELEGRAM_TEXT_LIMIT = 4096;
-const RESPONSE_STREAM_THROTTLE_MS = 500;
+const RESPONSE_STREAM_THROTTLE_MS = 200;
 const SESSION_RETRY_PREFIX = "🔁";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
