@@ -89,6 +89,21 @@ export class ToolMessageBatcher {
     this.enqueueTextInternal(sessionId, message);
   }
 
+  sendTextNow(sessionId: string, message: string, reason: string): void {
+    const normalizedMessage = message.trim();
+    if (!sessionId || normalizedMessage.length === 0) {
+      return;
+    }
+
+    const expectedGeneration = this.generation;
+    logger.debug(
+      `[ToolBatcher] Sending immediate text message outside queue: session=${sessionId}, reason=${reason}`,
+    );
+    void this.enqueueTask(sessionId, () =>
+      this.sendTextSafe(sessionId, normalizedMessage, reason, expectedGeneration),
+    );
+  }
+
   enqueueUniqueByPrefix(sessionId: string, message: string, prefix: string): void {
     this.enqueueTextInternal(sessionId, message, prefix);
   }
@@ -139,34 +154,6 @@ export class ToolMessageBatcher {
     if (this.queues.delete(sessionId)) {
       logger.debug(`[ToolBatcher] Cleared session queue: session=${sessionId}, reason=${reason}`);
     }
-  }
-
-  dropQueuedText(sessionId: string, text: string, reason: string): void {
-    const normalized = text.trim();
-    if (!sessionId || !normalized) {
-      return;
-    }
-
-    const queue = this.queues.get(sessionId);
-    if (!queue || queue.length === 0) {
-      return;
-    }
-
-    const filtered = queue.filter((item) => item.kind !== "text" || item.text !== normalized);
-    if (filtered.length === queue.length) {
-      return;
-    }
-
-    if (filtered.length === 0) {
-      this.clearTimer(sessionId);
-      this.queues.delete(sessionId);
-    } else {
-      this.queues.set(sessionId, filtered);
-    }
-
-    logger.debug(
-      `[ToolBatcher] Dropped queued text message: session=${sessionId}, reason=${reason}, remaining=${filtered.length}`,
-    );
   }
 
   clearAll(reason: string): void {

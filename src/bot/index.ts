@@ -65,6 +65,7 @@ import { processUserPrompt } from "./handlers/prompt.js";
 import { handleVoiceMessage } from "./handlers/voice.js";
 import { handleDocumentMessage } from "./handlers/document.js";
 import { downloadTelegramFile, toDataUri } from "./utils/file-download.js";
+import { deliverThinkingMessage } from "./utils/thinking-message.js";
 import { sendBotText } from "./utils/telegram-text.js";
 import { getModelCapabilities, supportsInput } from "../model/capabilities.js";
 import { getStoredModel } from "../model/manager.js";
@@ -299,10 +300,6 @@ async function ensureEventSubscription(directory: string): Promise<void> {
       return;
     }
 
-    if (!config.bot.hideThinkingMessages) {
-      toolMessageBatcher.dropQueuedText(sessionId, t("bot.thinking"), "response_stream_started");
-    }
-
     const preparedStreamPayload = prepareStreamingPayload(messageText);
     if (!preparedStreamPayload) {
       return;
@@ -499,10 +496,6 @@ async function ensureEventSubscription(directory: string): Promise<void> {
   });
 
   summaryAggregator.setOnThinking(async (sessionId) => {
-    if (config.bot.hideThinkingMessages) {
-      return;
-    }
-
     if (!botInstance || !chatIdInstance) {
       return;
     }
@@ -514,7 +507,10 @@ async function ensureEventSubscription(directory: string): Promise<void> {
 
     logger.debug("[Bot] Agent started thinking");
 
-    toolMessageBatcher.enqueue(sessionId, t("bot.thinking"));
+    deliverThinkingMessage(sessionId, toolMessageBatcher, {
+      responseStreaming: config.bot.responseStreaming,
+      hideThinkingMessages: config.bot.hideThinkingMessages,
+    });
   });
 
   summaryAggregator.setOnTokens(async (tokens) => {

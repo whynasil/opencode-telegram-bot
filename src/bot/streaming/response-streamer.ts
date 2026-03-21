@@ -155,11 +155,9 @@ export class ResponseStreamer {
       }
     }
 
-    if (state.telegramMessageIds.length === 0) {
-      this.cancelState(state);
-      this.states.delete(state.key);
-      return false;
-    }
+    this.clearTimer(state);
+
+    await state.task.catch(() => false);
 
     if (state.isBroken) {
       await this.cleanupBrokenStream(state, "complete_broken_stream");
@@ -168,7 +166,11 @@ export class ResponseStreamer {
       return false;
     }
 
-    this.clearTimer(state);
+    if (state.telegramMessageIds.length === 0) {
+      this.cancelState(state);
+      this.states.delete(state.key);
+      return false;
+    }
 
     let synced = true;
     if (options?.flushFinal !== false) {

@@ -213,6 +213,45 @@ describe("bot/streaming/response-streamer", () => {
     expect(deleteText).not.toHaveBeenCalled();
   });
 
+  it("waits for an in-flight first streamed send before finalizing short responses", async () => {
+    let resolveSend: ((messageId: number) => void) | null = null;
+    const sendText = vi.fn(
+      () =>
+        new Promise<number>((resolve) => {
+          resolveSend = resolve;
+        }),
+    );
+    const editText = vi.fn().mockResolvedValue(undefined);
+    const deleteText = vi.fn().mockResolvedValue(undefined);
+    const streamer = new ResponseStreamer({
+      throttleMs: 0,
+      sendText,
+      editText,
+      deleteText,
+    });
+
+    streamer.enqueue("s1", "m1", { parts: ["short reply"], format: "raw" });
+
+    await vi.waitFor(() => {
+      expect(sendText).toHaveBeenCalledTimes(1);
+    });
+
+    const completionPromise = streamer.complete("s1", "m1", {
+      parts: ["short reply"],
+      format: "raw",
+    });
+
+    expect(editText).not.toHaveBeenCalled();
+    expect(deleteText).not.toHaveBeenCalled();
+
+    resolveSend?.(1);
+
+    await expect(completionPromise).resolves.toBe(true);
+    expect(sendText).toHaveBeenCalledTimes(1);
+    expect(editText).not.toHaveBeenCalled();
+    expect(deleteText).not.toHaveBeenCalled();
+  });
+
   it("keeps visible partial messages when clearing a session and stops tracking the old stream", async () => {
     vi.useFakeTimers();
 
